@@ -99,7 +99,7 @@ OnFeedbackCallback uploadToGitLab({
         headers: {'PRIVATE-TOKEN': apiToken},
       );
 
-      Get.back(); //hide progress dialog
+      _hideProgressDialog();
       if (response.statusCode == 201) {
         //201 created code
         _showSnackBar("Submit success.", success: true);
@@ -107,7 +107,7 @@ OnFeedbackCallback uploadToGitLab({
         _showSnackBar("Submit failed. Please try again.");
       }
     } catch (e) {
-      Get.back(); //hide progress dialog
+      _hideProgressDialog();
       _showSnackBar("Submit failed. Please try again.");
     }
   };
@@ -130,13 +130,16 @@ void _showSnackBar(String message, {bool success = false}) {
 void _showProgressDialog() {
   Get.dialog(
     const PopScope(
-      canPop: false,
+      canPop: true,
       child: Center(
         child: Wrap(
           children: [
             Dialog(
-              insetPadding: EdgeInsets.symmetric(horizontal: 140, vertical: 0),
-              child: CircularProgressIndicator(strokeWidth: 2),
+              insetPadding: EdgeInsets.symmetric(horizontal: 145, vertical: 0),
+              child: Padding(
+                padding: EdgeInsets.all(32),
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
             ),
           ],
         ),
@@ -144,4 +147,8 @@ void _showProgressDialog() {
     ),
     barrierDismissible: false,
   );
+}
+
+void _hideProgressDialog() {
+  Navigator.of(Get.overlayContext!, rootNavigator: true).pop();
 }
