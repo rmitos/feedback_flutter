@@ -1,0 +1,1 @@
+export 'src/feedback_gitlab/feedback_gitlab.dart';
