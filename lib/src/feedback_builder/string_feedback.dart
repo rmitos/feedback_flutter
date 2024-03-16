@@ -99,7 +99,7 @@ class _StringFeedbackState extends State<StringFeedback> {
           key: const Key('submit_feedback_button'),
           onPressed: () => widget.onSubmit(controller.text),
           style: OutlinedButton.styleFrom(
-            backgroundColor: const Color(0XFF012970),
+            backgroundColor: const Color(0xffe74c3c),
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.zero,
             ),

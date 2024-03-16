@@ -1,6 +1,6 @@
 name: feedback_flutter
 description: "Flutter package for user feedback"
-version: 0.0.5
+version: 0.0.6
 homepage: https://github.com/rmitos/feedback_flutter.git
 
 environment:
