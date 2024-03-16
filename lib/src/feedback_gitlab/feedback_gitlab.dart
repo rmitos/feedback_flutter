@@ -91,8 +91,8 @@ OnFeedbackCallback uploadToGitLab({
         Uri.https(
           baseUrl,
           '/api/v4/projects/$projectId/issues',
-          <String, String>{
-            'title': feedback.text,
+          <String, String> {
+            'title': 'mfExpert LMS mobile app',
             'description': description,
           },
         ),
