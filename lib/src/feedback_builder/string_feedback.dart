@@ -103,6 +103,7 @@ class _StringFeedbackState extends State<StringFeedback> {
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.zero,
             ),
+            side: const BorderSide(color: Color(0xffe74c3c)),
           ),
           child: Text(
             FeedbackLocalizations.of(context).submitButtonText,
