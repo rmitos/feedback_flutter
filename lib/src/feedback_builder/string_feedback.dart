@@ -97,16 +97,16 @@ class _StringFeedbackState extends State<StringFeedback> {
         ),
         OutlinedButton(
           key: const Key('submit_feedback_button'),
-          child: Text(
-            FeedbackLocalizations.of(context).submitButtonText,
-            style: const TextStyle(color: Colors.white),
-          ),
           onPressed: () => widget.onSubmit(controller.text),
           style: OutlinedButton.styleFrom(
             backgroundColor: const Color(0XFF012970),
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.zero,
             ),
+          ),
+          child: Text(
+            FeedbackLocalizations.of(context).submitButtonText,
+            style: const TextStyle(color: Colors.white),
           ),
         ),
         const SizedBox(height: 8),

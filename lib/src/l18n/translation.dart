@@ -72,7 +72,7 @@ class EnFeedbackLocalizations extends FeedbackLocalizations {
   const EnFeedbackLocalizations();
 
   @override
-  String get submitButtonText => 'SUBMIT';
+  String get submitButtonText => 'Report Issue';
 
   @override
   String get feedbackDescriptionText => 'Description';
