@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs
 
 import 'feedback_mode.dart';
+import 'l18n/translation.dart';
+import 'theme/feedback_theme.dart';
 import 'package:flutter/material.dart';
 
 import 'feedback_mode.dart';

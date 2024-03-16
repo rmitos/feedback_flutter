@@ -1,4 +1,5 @@
 import '../better_feedback.dart';
+import '../l18n/translation.dart';
 import '../theme/feedback_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -62,7 +63,11 @@ class _StringFeedbackState extends State<StringFeedback> {
                 // Pad the top by 20 to match the corner radius if drag enabled.
                 padding: EdgeInsets.fromLTRB(16, widget.scrollController != null ? 20 : 16, 16, 0),
                 children: <Widget>[
-                  Text("Description", maxLines: 2, style: FeedbackTheme.of(context).bottomSheetDescriptionStyle),
+                  Text(
+                    FeedbackLocalizations.of(context).feedbackDescriptionText,
+                    maxLines: 2,
+                    style: FeedbackTheme.of(context).bottomSheetDescriptionStyle,
+                  ),
                   TextField(
                     style: FeedbackTheme.of(context).bottomSheetTextInputStyle,
                     key: const Key('text_input_field'),
@@ -92,6 +97,10 @@ class _StringFeedbackState extends State<StringFeedback> {
         ),
         OutlinedButton(
           key: const Key('submit_feedback_button'),
+          child: Text(
+            FeedbackLocalizations.of(context).submitButtonText,
+            style: const TextStyle(color: Colors.white),
+          ),
           onPressed: () => widget.onSubmit(controller.text),
           style: OutlinedButton.styleFrom(
             backgroundColor: const Color(0XFF012970),
@@ -99,7 +108,6 @@ class _StringFeedbackState extends State<StringFeedback> {
               borderRadius: BorderRadius.zero,
             ),
           ),
-          child: const Text("SUBMIT", style: TextStyle(color: Colors.white)),
         ),
         const SizedBox(height: 8),
       ],

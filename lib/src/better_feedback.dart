@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import '../feedback_flutter.dart';
+import 'debug.dart';
 import 'feedback_builder/string_feedback.dart';
 import 'feedback_data.dart';
 import 'feedback_widget.dart';
 import 'theme/feedback_theme.dart';
 import 'utilities/feedback_app.dart';
 import 'utilities/renderer/renderer.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// The function to be called when the user submits his feedback.
@@ -106,6 +108,8 @@ class BetterFeedback extends StatefulWidget {
     this.themeMode,
     this.theme,
     this.darkTheme,
+    this.localizationsDelegates,
+    this.localeOverride,
     this.mode = FeedbackMode.draw,
     this.pixelRatio = 2.0, //actual pixelRatio is 3.0
   }) : assert(
@@ -143,6 +147,19 @@ class BetterFeedback extends StatefulWidget {
   /// The theme, which gets used to style the feedback ui if the [themeMode] is
   /// ThemeMode.dark or user's system preference is dark.
   final FeedbackThemeData? darkTheme;
+
+  /// The delegates for this library's FeedbackLocalization widget.
+  /// You need to supply the following delegates if you choose to customize it.
+  /// [MaterialLocalizations]
+  /// [CupertinoLocalizations]
+  /// [WidgetsLocalizations]
+  /// an instance of [LocalizationsDelegate]<[FeedbackLocalizations]>
+  final List<LocalizationsDelegate<dynamic>>? localizationsDelegates;
+
+  /// Can be used to set the locale.
+  /// If it is not set, the platform default locale is used.
+  /// If no platform default locale exists, english is used.
+  final Locale? localeOverride;
 
   /// Set the default mode when launching feedback.
   /// By default it will allow the user to navigate.
@@ -204,11 +221,14 @@ class _BetterFeedbackState extends State<BetterFeedback> {
       themeMode: widget.themeMode,
       theme: widget.theme,
       darkTheme: widget.darkTheme,
+      localizationsDelegates: widget.localizationsDelegates,
+      localeOverride: widget.localeOverride,
       child: Builder(builder: (context) {
         return FeedbackData(
           controller: controller,
           child: Builder(
             builder: (context) {
+              assert(debugCheckHasFeedbackLocalizations(context));
               return FeedbackWidget(
                 isFeedbackVisible: controller.isVisible,
                 drawColors: FeedbackTheme.of(context).drawColors,

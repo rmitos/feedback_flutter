@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs
 
+import '../l18n/localization.dart';
 import '../theme/feedback_theme.dart';
 import 'media_query_from_window.dart';
 import 'package:flutter/material.dart';
@@ -11,12 +12,16 @@ class FeedbackApp extends StatelessWidget {
     this.themeMode,
     this.theme,
     this.darkTheme,
+    this.localizationsDelegates,
+    this.localeOverride,
   });
 
   final Widget child;
   final ThemeMode? themeMode;
   final FeedbackThemeData? theme;
   final FeedbackThemeData? darkTheme;
+  final List<LocalizationsDelegate<dynamic>>? localizationsDelegates;
+  final Locale? localeOverride;
 
   FeedbackThemeData _buildThemeData(BuildContext context) {
     final ThemeMode mode = themeMode ?? ThemeMode.system;
@@ -52,6 +57,10 @@ class FeedbackApp extends StatelessWidget {
       mediaQueryWrapper = themeWrapper;
     }
 
-    return mediaQueryWrapper;
+    return FeedbackLocalization(
+      delegates: localizationsDelegates,
+      localeOverride: localeOverride,
+      child: mediaQueryWrapper,
+    );
   }
 }
