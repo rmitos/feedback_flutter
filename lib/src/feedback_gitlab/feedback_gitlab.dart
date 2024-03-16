@@ -57,49 +57,57 @@ OnFeedbackCallback uploadToGitLab({
   final baseUrl = gitlabUrl ?? 'gitlab.com';
 
   return (UserFeedback feedback) async {
-    final uri = Uri.https(
-      baseUrl,
-      '/api/v4/projects/$projectId/uploads',
-    );
-    final uploadRequest = http.MultipartRequest('POST', uri)
-      ..headers.putIfAbsent('PRIVATE-TOKEN', () => apiToken)
-      ..fields['id'] = projectId
-      ..files.add(http.MultipartFile.fromBytes(
-        'file',
-        feedback.screenshot,
-        filename: 'feedback.png',
-        contentType: MediaType('image', 'png'),
-      ));
-
-    final uploadResponse = await httpClient.send(uploadRequest);
-
-    final dynamic uploadResponseMap = jsonDecode(
-      await uploadResponse.stream.bytesToString(),
-    );
-
-    final imageMarkdown = uploadResponseMap["markdown"] as String?;
-    final extras = feedback.extra?.toString() ?? '';
-
-    final description = '${feedback.text}\n\n'
-        '${imageMarkdown ?? 'Missing image!'}\n\n'
-        '$extras';
-
-    // Create issue
-    final response = await httpClient.post(
-      Uri.https(
+    try {
+      _showProgressDialog();
+      final uri = Uri.https(
         baseUrl,
-        '/api/v4/projects/$projectId/issues',
-        <String, String>{
-          'title': feedback.text,
-          'description': description,
-        },
-      ),
-      headers: {'PRIVATE-TOKEN': apiToken},
-    );
+        '/api/v4/projects/$projectId/uploads',
+      );
+      final uploadRequest = http.MultipartRequest('POST', uri)
+        ..headers.putIfAbsent('PRIVATE-TOKEN', () => apiToken)
+        ..fields['id'] = projectId
+        ..files.add(http.MultipartFile.fromBytes(
+          'file',
+          feedback.screenshot,
+          filename: 'feedback.png',
+          contentType: MediaType('image', 'png'),
+        ));
 
-    if (response.statusCode == 201) { //201 created code
-      _showSnackBar("Submit success.", success: true);
-    } else {
+      final uploadResponse = await httpClient.send(uploadRequest);
+
+      final dynamic uploadResponseMap = jsonDecode(
+        await uploadResponse.stream.bytesToString(),
+      );
+
+      final imageMarkdown = uploadResponseMap["markdown"] as String?;
+      final extras = feedback.extra?.toString() ?? '';
+
+      final description = '${feedback.text}\n\n'
+          '${imageMarkdown ?? 'Missing image!'}\n\n'
+          '$extras';
+
+      // Create issue
+      final response = await httpClient.post(
+        Uri.https(
+          baseUrl,
+          '/api/v4/projects/$projectId/issues',
+          <String, String>{
+            'title': feedback.text,
+            'description': description,
+          },
+        ),
+        headers: {'PRIVATE-TOKEN': apiToken},
+      );
+
+      Get.back(); //hide progress dialog
+      if (response.statusCode == 201) {
+        //201 created code
+        _showSnackBar("Submit success.", success: true);
+      } else {
+        _showSnackBar("Submit failed. Please try again.");
+      }
+    } catch (e) {
+      Get.back(); //hide progress dialog
       _showSnackBar("Submit failed. Please try again.");
     }
   };
@@ -116,5 +124,24 @@ void _showSnackBar(String message, {bool success = false}) {
     borderRadius: 0,
     margin: const EdgeInsets.all(0),
     duration: const Duration(seconds: 5),
+  );
+}
+
+void _showProgressDialog() {
+  Get.dialog(
+    const PopScope(
+      canPop: false,
+      child: Center(
+        child: Wrap(
+          children: [
+            Dialog(
+              insetPadding: EdgeInsets.symmetric(horizontal: 140, vertical: 0),
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+          ],
+        ),
+      ),
+    ),
+    barrierDismissible: false,
   );
 }
